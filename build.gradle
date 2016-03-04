@@ -1,15 +1,24 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
     compile group: 'io.dropwizard', name: 'dropwizard-core', version: '0.8.2'
+    compile group: 'commons-configuration', name: 'commons-configuration', version: '1.6'
 }
 
-mainClassName = 'hello.ProductApplication'
+mainClassName = 'product.ProductApplication'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -18,31 +27,19 @@ targetCompatibility = 1.8
 jar {
     baseName = 'orion-dw-mvp'
     version =  '0.1.0'
-}
 
-
-// buildscript {
-//     repositories {
-//         mavenCentral()
-//     }
-//     dependencies {
-//         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.2.RELEASE")
-//     }
-// }
-//
-// dependencies {
-//     compile("org.springframework.boot:spring-boot-starter-web")
-//     testCompile("org.springframework.boot:spring-boot-starter-test")
-// }
-run {
-    args 'server', 'product.yml'
-}
-
-task fatJar(type: Jar) {
     manifest {
-        attributes 'Main-Class': 'hello.ProductApplication'
+        attributes "Main-Class" : "product.ProductApplication"
     }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
+run {
+    args 'server', 'empty.json'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
+

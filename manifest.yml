@@ -1,0 +1,13 @@
+---
+applications:
+- name: neha-orion-dropwizard-mvp
+  buildpack: https://github.com/cloudfoundry/java-buildpack#v3.6
+  path: build/libs/orion-dw-mvp-0.1.0.jar
+  instances: 1
+  memory: 250M
+  stack: cflinuxfs2
+  env:
+    JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{enabled: false}'
+    JBP_CONFIG_JAVA_MAIN: '{arguments: "server <(echo {})"}'
+   # JAVA_OPTS: -Ddw.server.type=simple -Ddw.server.applicationContextPath=/ -Ddw.server.adminContextPath=/admin -Ddw.server.connector.port=\$PORT -Ddw.server.connector.type=http
+    JAVA_OPTS: -Ddw.server.applicationConnectors[0].port=\$PORT -Ddw.logging.level=DEBUG
